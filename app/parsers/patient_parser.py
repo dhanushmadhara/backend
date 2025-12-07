@@ -11,11 +11,11 @@ class PatientDetailsParser(BaseParser):
         }
 
     def get_patient_name(self):
-        m = re.search(r"(Name|Patient Information)[:\s]+([A-Za-z .,-]+)", self.text)
-        return m.group(2).strip() if m else None
+        m = re.search(r"(?:Name|Patient Information)[:\\s]+([A-Za-z .,-]+)", self.text)
+        return m.group(1).strip() if m else None
 
     def get_phone_number(self):
-        m = re.search(r"\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}", self.text)
+        m = re.search(r"\\(?\\d{3}\\)?[-.\\s]?\\d{3}[-.\\s]?\\d{4}", self.text)
         return m.group(0) if m else None
 
     def get_hepb_status(self):
@@ -23,5 +23,5 @@ class PatientDetailsParser(BaseParser):
         return m.group(1) if m else None
 
     def get_medical_problems(self):
-        m = re.search(r"Medical Problems[:\s]+(.*)", self.text, flags=re.IGNORECASE)
+        m = re.search(r"Medical Problems[:\\s]+(.*)", self.text, flags=re.IGNORECASE)
         return m.group(1).strip() if m else None
