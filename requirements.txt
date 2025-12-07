@@ -1,10 +1,10 @@
 fastapi
 uvicorn[standard]
-pydantic
 pydantic-settings
 pytesseract
 pdf2image
 pillow
 opencv-python-headless
 python-multipart
-
+sqlalchemy>=1.4
+asyncpg
