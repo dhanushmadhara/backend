@@ -10,8 +10,7 @@ def preprocess_image(pil_img: Image.Image) -> np.ndarray:
     if scale != 1.0:
         gray = cv2.resize(gray, None, fx=scale, fy=scale, interpolation=cv2.INTER_LINEAR)
     gray = cv2.fastNlMeansDenoising(gray, None, 10, 7, 21)
-    thresh = cv2.adaptiveThreshold(
-        gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
-        cv2.THRESH_BINARY, 61, 11
-    )
-    return thresh
+    processed = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C,
+                                      cv2.THRESH_BINARY, 61, 11)
+    return processed
+
