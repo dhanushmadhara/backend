@@ -5,10 +5,19 @@ from ..parsers.prescription_parser import PrescriptionParser
 from ..config import settings
 
 def extract_from_pdf_bytes(pdf_bytes: bytes, file_format: str) -> dict:
-    images = pdf_bytes_to_images(pdf_bytes, settings.poppler_path)
+    images = pdf_bytes_to_images(pdf_bytes)
+    if not images:
+        raise ValueError("No pages found in PDF")
     text = ocr_images(images)
-    if file_format == "patient_details":
-        return PatientDetailsParser(text).parse()
+
     if file_format == "prescription":
-        return PrescriptionParser(text).parse()
-    raise ValueError("Invalid document format")
+        parsed = PrescriptionParser(text).parse()
+    elif file_format == "patient_details":
+        parsed = PatientDetailsParser(text).parse()
+    else:
+        raise ValueError("Unsupported file_format")
+
+    # attach raw_text so we can store it
+    parsed["_raw_text"] = text
+    return parsed
+
